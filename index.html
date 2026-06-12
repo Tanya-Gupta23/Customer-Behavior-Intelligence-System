@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+        <title> Customer Behavior Intelligence System </title>
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+            }
+            h1, h2, h3{
+    font-family: 'Orbitron', sans-serif;
+}
+
+            h1{
+                text-align: center;
+                margin-top: 50px;
+                font-size: 36px;
+                color: #333;
+            }
+            <!DOCTYPE HTML>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+        <title> Customer Behavior Intelligence System </title>
+        <style>
+            body {
+                font-family: 'Orbitron', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+            }
+            h1, h2, h3 {
+    font-family: 'Orbitron', sans-serif;
+}
+
+            h1{
+                h1 {
+                    text-align: center;
+    font-size: 42px;
+    letter-spacing: 2px;
+    color: #2c3e50;
+}
+            }
+
+            form{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                margin-top: 50px;
+                max-width: 600px;
+                margin: 30px auto;
+            }
+           
+
+            .container {
+                width: 100%;
+                background-color: #f2f2f2;
+                padding: 30px 60px;
+                border-radius: 12px;
+                box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            h2 {
+                margin-bottom: 20px;
+                color: #333;
+            }           
+
+            input[type="file"] {
+                padding: 8px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                width: 80%;
+                background-color: white;
+                margin-top: 10px;
+            }
+
+            button {
+                margin-top: 20px;
+                padding: 10px 25px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+            
+            .plots {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+                width: 100%;
+                margin-top: 40px;
+            }
+            
+            .plots img {
+                width: 100%;
+                height: auto;
+                border-radius: 12px;
+                background-color: white;
+                padding: 15px;
+                box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            }
+            form + h3 {
+                margin-top: 30px;
+            }
+
+            .plots img:hover {
+                transform: scale(1.05);
+                transition: 0.3s;
+            }
+
+            #donut-section {
+                text-align: center;
+                margin-top: 50px;
+            }
+
+            #cluster-info div:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+#donut-section img:hover {
+    transform: scale(1.1) ;
+    transition: 0.3s ease;
+    box-shadow: 0px 15px 40px rgba(0,0,0,0.3);
+}
+.hero {
+    position: relative;
+    height: 160px;
+    background: #0f2027;
+    overflow: hidden;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.hero h1 {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    padding-top: 50px;
+}
+
+
+        </style>
+
+        <script>
+            function handleSubmit(event){
+                event.preventDefault();
+
+                var file= document.getElementById("file-upload").files[0];
+                var formData= new FormData()
+                formData.append("file", file)
+
+                var spinner=document.getElementById("spinner");
+                spinner.style.display="block";
+
+                let messages = [
+                    "Reading dataset...",
+                    "Cleaning and preprocessing data...",
+                    "Calculating RFM features...",
+                    "Analyzing customer behavior...",
+                    "Segmenting customers into groups...",
+                    "Generating visualizations..."
+                ];
+
+                let i = 0;
+
+                let interval = setInterval(() => {
+                    if(i < messages.length){
+                        spinner.innerText = messages[i];
+                        i++;
+                    }
+                }, 1000);
+                
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST","/predict");
+                xhr.send(formData);
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState === 4 && xhr.status === 200){
+                    document.getElementById("results").innerHTML="";
+                    clearInterval(interval);
+                    var response = JSON.parse(xhr.responseText);
+                    spinner.innerText = "Total Customers: " + response.total_customers + " | Segmentation Complete ";
+
+                    var amountImg= document.createElement("img");
+                    amountImg.src=response.amount_img;
+                    
+                    var freqImg=document.createElement("img");
+                    freqImg.src=response.freq_img;
+                    
+                    var recencyImg=document.createElement("img");
+                    recencyImg.src=response.recency_img;
+                    
+
+                    var donutImg = document.createElement("img");
+                    donutImg.src = response.donut_img;
+                    donutImg.style.width = "50%";
+
+
+
+                    
+
+                    var imagesDiv = document.createElement("div");
+                    imagesDiv.className = "plots";
+                    imagesDiv.style.flexWrap="wrap";
+                    imagesDiv.style.marginTop="20px";
+                    imagesDiv.style.marginBottom="20px";
+                    imagesDiv.style.justifyContent="center";
+                    imagesDiv.style.gap="40px";
+                    imagesDiv.style.alignItems="center";
+                    imagesDiv.style.width="100%";
+                    imagesDiv.appendChild(amountImg);
+                    imagesDiv.appendChild(freqImg);
+                    imagesDiv.appendChild(recencyImg);
+
+                    var infoDiv = document.getElementById("cluster-info");
+
+infoDiv.innerHTML = `
+    <h3>Understanding Customer Segments</h3>
+    <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap; margin-top:20px;">
+        
+<div style="background:rgba(255, 99, 132, 0.15); padding:20px; border-radius:10px; width:250px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+            <h4>Low Value Customers</h4>
+            <p>These customers have low spending and low engagement.</p>
+            <p><b>Strategy:</b> Offer discounts or re-engagement campaigns.</p>
+        </div>
+
+        <div style="background:rgba(54, 162, 235, 0.15); padding:20px; border-radius:10px; width:250px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+            <h4>Regular Customers </h4>
+            <p>These customers purchase occasionally.</p>
+            <p><b>Strategy:</b> Keep them engaged with offers.</p>
+        </div>
+
+        <div style="background:rgba(75, 192, 192, 0.15); padding:20px; border-radius:10px; width:250px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+            <h4>High Value Customers </h4>
+            <p>These are your most valuable customers.</p>
+            <p><b>Strategy:</b> Provide loyalty rewards and premium offers.</p>
+        </div>
+
+    </div>
+`;
+                    
+                    document.getElementById("results").appendChild(imagesDiv);
+
+                    var donutContainer = document.createElement("div");
+                    donutContainer.style.textAlign = "center";
+                    donutContainer.style.marginTop = "50px";
+
+                    var title = document.createElement("h3");
+                    title.innerText = "Customer Segmentation Overview";
+
+                    donutImg.style.width = "350px";
+
+                    donutContainer.appendChild(title);
+                    donutContainer.appendChild(donutImg);
+
+                    document.getElementById("donut-section").appendChild(donutContainer);
+
+                }
+
+            };
+        }
+        </script>
+
+        <script>
+            function checkCustomer(event){
+                event.preventDefault();
+                var spinner = document.getElementById("spinner");
+
+                var spinner = document.getElementById("spinner");   
+                spinner.style.display = "block";                    
+                spinner.innerText = "Fetching customer insight..."; 
+            
+                var cust_id = document.querySelector('input[name="customer_id"]').value;
+            
+                var formData = new FormData();
+                formData.append("customer_id", cust_id);
+            
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/customer");
+                xhr.send(formData);
+
+                
+
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState === 4 && xhr.status === 200){
+                        
+                        spinner.innerText = " Analysis Complete!";;
+                        document.getElementById("customer-result").innerHTML = xhr.responseText;
+                    }
+                };
+            }
+        </script>
+        
+        </head>
+
+<body>
+
+<div class="hero">
+    <div id="particles-js"></div>
+    <h1>Customer Behavior Intelligence System</h1>
+</div>
+
+<div class="container">
+
+    <h2>Upload CSV File</h2>
+
+    <form onsubmit="handleSubmit(event)" enctype="multipart/form-data">
+        <input type="file" id="file-upload" name="file" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="spinner" style="display:none; margin-top:20px; font-weight:500;">
+    Initializing...
+    </div>
+    <div id="results"></div>
+
+    <div id="cluster-info" style="margin-top:30px;"></div>
+    <div id="donut-section"></div>
+
+    <h3>Check Individual Customer</h3>
+
+<form onsubmit="checkCustomer(event)">
+        <input type="text" name="customer_id" placeholder="Enter Customer ID" required>
+        <button type="submit">Check</button>
+    </form>
+    <div id="customer-result" style="margin-top:20px; font-weight:bold;"></div>
+
+    
+
+</div>
+</script>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60 },
+    size: { value: 3 },
+    move: { speed: 2 },
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#00ffff"
+    }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "repulse" }
+    }
+  }
+});
+</script>
+
+</body>
+</body>
+</html>
